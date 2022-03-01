@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TeamPlayers.Core\TeamPlayers.Core.csproj" />
+  </ItemGroup>
+
 </Project>
