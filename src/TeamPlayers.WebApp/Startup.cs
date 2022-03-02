@@ -51,7 +51,7 @@ namespace TeamPlayers.WebApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Dashboard}/{action=Datos}/{id?}");
             });
         }
     }
