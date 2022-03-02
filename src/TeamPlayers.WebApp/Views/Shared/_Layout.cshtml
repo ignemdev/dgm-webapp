@@ -3,42 +3,46 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TeamPlayers.WebApp</title>
+    <title>TeamPlayers</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="/lib/metroui/dist/css/metro-all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@ViewData["Title"]</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Equipo" asp-action="Mantenimiento">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - Ignacio Morel Pujols | DGM
+    <aside class="sidebar pos-absolute z-2"
+           data-role="sidebar"
+           data-toggle="#sidebar-toggle-3"
+           id="sb3"
+           data-shift=".shifted-content">
+        <ul class="sidebar-menu">
+            <li class="group-title">Mantenimientos</li>
+            <li><a asp-controller="Estado" asp-action="Mantenimiento"><span class="mif-cogs icon"></span>Estados</a></li>
+            <li><a asp-controller="Equipo" asp-action="Mantenimiento"><span class="mif-organization icon"></span>Equipos</a></li>
+            <li><a asp-controller="Jugador" asp-action="Mantenimiento"><span class="mif-users icon"></span>Jugadores</a></li>
+            <li class="divider"></li>
+        </ul>
+    </aside>
+    <div class="shifted-content h-100 p-ab">
+        <div class="app-bar pos-absolute bg-lightCobalt z-1 d-flex flex-justify-between" data-role="appbar">
+            <button class="app-bar-item c-pointer" id="sidebar-toggle-3">
+                <span class="mif-apps mif-3x fg-white"></span>
+            </button>
+            <a class="brand fg-white text-bold" asp-controller="Dashboard" asp-action="Datos">@ViewData["Title"] | Team Players</a>
         </div>
-    </footer>
+
+        <div class="h-100 p-4">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+            <footer class="border-top footer text-muted">
+                <div class="container">
+                    &copy; @DateTime.Now.Year - Ignacio Morel Pujols | DGM
+                </div>
+            </footer>
+        </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/lib/metroui/dist/js/metro.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>

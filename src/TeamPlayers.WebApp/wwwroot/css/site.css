@@ -1,7 +1,4 @@
-﻿.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;700&display=swap');
+* {
+    font-family: 'Outfit', sans-serif;
 }
