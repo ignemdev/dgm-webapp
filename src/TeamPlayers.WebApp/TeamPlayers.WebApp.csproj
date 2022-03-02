@@ -20,4 +20,9 @@
 		<ProjectReference Include="..\TeamPlayers.Services\TeamPlayers.Services.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\" />
+	  <Folder Include="wwwroot\lib\metroui\" />
+	</ItemGroup>
+
 </Project>
