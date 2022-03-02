@@ -24,6 +24,7 @@ namespace TeamPlayers.WebApp
         {
             services.AddMvcConfigurations();
             services.AddDatabaseConfigurations(Configuration);
+            services.AddUnitOfWork();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
