@@ -2,3 +2,28 @@
 * {
     font-family: 'Outfit', sans-serif;
 }
+
+
+zing-grid {
+    --zg-button-box-shadow_custom: none;
+    --zg-button-border_custom: none;
+    --zg-button-background_custom_active: none;
+    --zg-button-background_custom_hover: none;
+    --zg-button-box-shadow_custom_active: none;
+    --zg-button-box-shadow_custom_hover: none;
+    --zg-button-border_custom_active: none;
+    --zg-button-border_custom_hover: none;
+}
+
+.mySwitch .check::after {
+    background: #0a87c1 !important;
+    border-color: #0a87c1 !important;
+}
+
+.mySwitch input[type="checkbox"]:checked ~ .check {
+    background: #0a87c1 !important;
+}
+
+    .mySwitch input[type="checkbox"]:checked ~ .check::after {
+        border-color: #ffffff !important;
+        background: #ffffff !important;

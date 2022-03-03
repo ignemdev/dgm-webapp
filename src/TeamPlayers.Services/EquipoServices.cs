@@ -48,7 +48,7 @@ namespace TeamPlayers.Services
 
         public async Task<IEnumerable<Equipo>> GetAllEquipos()
         {
-            var equipos = await _unitOfWork.Equipo.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado));
+            var equipos = await _unitOfWork.Equipo.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado), includeProperties: "Estado");
             return equipos;
         }
 

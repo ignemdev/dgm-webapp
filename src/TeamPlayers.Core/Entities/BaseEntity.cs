@@ -10,6 +10,6 @@ namespace TeamPlayers.Core.Entities
         public int Id { get; set; }
         [Required(AllowEmptyStrings =false)]
         public string Nombre { get; set; } = default!;
-        public DateTime Creado { get; set; }
+        public DateTime Creado { get; set; } = DateTime.Now;
     }
 }

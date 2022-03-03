@@ -15,8 +15,9 @@ namespace TeamPlayers.Core.Entities
         
         [Required(AllowEmptyStrings = false)]
         [MinLength(3)]
+        [MaxLength(3)]
         public string Pais { get; set; } = default!;
-        public int IdEstado { get; set; }
+        public int IdEstado { get; set; } = 1;
         public Estado Estado { get; set; } = default!;
         public ICollection<Jugador> Jugadores { get; set; }
     }
