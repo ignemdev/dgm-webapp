@@ -25,6 +25,26 @@ namespace TeamPlayers.WebApp.Controllers
         }
 
         #region APIs
+        [HttpGet("/api/equipo/{id:int}")]
+        public async Task<ActionResult<ResponseModel<Equipo>>> GetEquipoById(int id)
+        {
+            var response = new ResponseModel<Equipo>();
+            try
+            {
+                response.Result = await _equipoServices.GetEquipoById(id);
+
+                if (response.Result == null)
+                    return NotFound();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.SetErrorMessage((ex.InnerException ?? ex).Message);
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("/api/equipo")]
         public async Task<ActionResult<ResponseModel<IEnumerable<Equipo>>>> GetAllEquipos()
         {

@@ -46,7 +46,6 @@
     <div class="dialog"
          data-role="dialog"
          data-on-close="upsertModalOnCloseHandler()"
-         data-on-open="upsertModalOnOpenHandler()"
          id="equipo-mantenimiento-modal-upsert">
 
         <div class="dialog-title">Guardar/Editar Equipo</div>
@@ -68,10 +67,13 @@
 <partial name="_GenericMethods">
     <script>
         //references
+        
         const addButton = document.querySelector('#equipo-mantenimiento-button-add');
+        const editButton = null;
         const upsertModal = document.querySelector('#equipo-mantenimiento-modal-upsert');
         const upsertForm = document.querySelector('#equipo-mantenimiento-form-upsert');
         const zinggrid = document.querySelector('zing-grid');
+
         const selectConfig = {
             url: '/datasets/countries.json',
             selectId: '#equipo-mantenimiento-form-upsert #Pais',
@@ -83,24 +85,37 @@
             headers: { 'Content-Type': 'application/json'}
         }
 
-
         //function
         const refreshGrid = () => zinggrid.refresh();
 
+        const getData = async (url) => {
+            debugger;
+            const response = await fetch(url);
+            const {result} = response.json();
+        }
+
         //handlers
-        const addButtonHandler = (e) =>  Metro.dialog.open(upsertModal);
+        const addButtonHandler = async (e) => {
+            await initSelect(selectConfig);
+            Metro.dialog.open(upsertModal);
+        } 
+
+        const editButtonHandler = async (e) =>  {
+            await initSelect(selectConfig, 'DOM');
+            var {target: {dataset: { id }}} = e;
+
+            var response = await getData(`/api/equipo/${id}`)
+            console.log(response);
+
+            Metro.dialog.open(upsertModal);
+        };
 
         const upsertModalOnCloseHandler = () => {
             refreshGrid()
         }
 
-        const upsertModalOnOpenHandler = async () => {
-            await initSelect(selectConfig);
-        }
-
         const upsertFormSubmitHandler = async (e) =>{
             e.preventDefault();
-            debugger;
             const values = getObjectFromForm(e);
             const {Id, ...equipo} = values;
 
@@ -121,6 +136,7 @@
 
         //listeners
         addButton.addEventListener('click', addButtonHandler);
+        $(zinggrid).on('click', "button.equipo-mantenimiento-button-edit", editButtonHandler);
         upsertForm.addEventListener('submit', upsertFormSubmitHandler)
     </script>
         }

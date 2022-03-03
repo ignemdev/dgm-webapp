@@ -37,7 +37,7 @@ namespace TeamPlayers.Services
             if (jugadorId == 0)
                 throw new ArgumentNullException(MessageHandler.E2);
 
-            var dbJugador = await _unitOfWork.Jugador.GetByIdAsync(jugadorId);
+            var dbJugador = await _unitOfWork.Jugador.GetFirstOrDefaultAsync(j => j.Id == jugadorId, includeProperties: "Equipo,Estado");
 
             if (dbJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);
