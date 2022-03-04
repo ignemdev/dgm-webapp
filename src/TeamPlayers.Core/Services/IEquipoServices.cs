@@ -10,6 +10,7 @@ namespace TeamPlayers.Core.Services
         Task<Equipo> AddEquipo(Equipo Equipo);
         Task<Equipo> UpdateEquipo(Equipo Equipo);
         Task<Equipo> GetEquipoById(int EquipoId);
-        Task DeleteEquipoById(int jugadorId);
+        Task<Equipo> DeleteEquipoById(int equipoId);
+        Task<Equipo> ToggleEquipoById(int equipoId);
     }
 }

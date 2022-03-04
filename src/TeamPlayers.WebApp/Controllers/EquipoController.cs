@@ -25,7 +25,7 @@ namespace TeamPlayers.WebApp.Controllers
         }
 
         #region APIs
-        [HttpGet("/api/equipo/{id:int}")]
+        [HttpGet("/api/equipo/{id:int}", Name = "GetEquipoById")]
         public async Task<ActionResult<ResponseModel<Equipo>>> GetEquipoById(int id)
         {
             var response = new ResponseModel<Equipo>();
@@ -76,7 +76,7 @@ namespace TeamPlayers.WebApp.Controllers
                 if (response.Result == null)
                     return NotFound();
 
-                return Ok(response);
+                return CreatedAtRoute("GetEquipoById", new { id = response.Result.Id }, response.Result);
             }
             catch (Exception ex)
             {
@@ -96,7 +96,7 @@ namespace TeamPlayers.WebApp.Controllers
                 if (response.Result == null)
                     return NotFound();
 
-                return Ok(response);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -105,6 +105,45 @@ namespace TeamPlayers.WebApp.Controllers
             }
         }
 
+        [HttpPut("/api/equipo/status")]
+        public async Task<ActionResult<ResponseModel<Equipo>>> ToggleEquipoById([FromBody] ToggleDTO toggleDTO)
+        {
+            var response = new ResponseModel<Equipo>();
+            try
+            {
+                response.Result = await _equipoServices.ToggleEquipoById(toggleDTO.Id);
+
+                if (response.Result == null)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                response.SetErrorMessage((ex.InnerException ?? ex).Message);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete("/api/equipo/{id:int}")]
+        public async Task<ActionResult<ResponseModel<Equipo>>> DeleteEquipoById(int id)
+        {
+            var response = new ResponseModel<Equipo>();
+            try
+            {
+                response.Result = await _equipoServices.DeleteEquipoById(id);
+
+                if (response.Result == null)
+                    return NotFound();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.SetErrorMessage((ex.InnerException ?? ex).Message);
+                return BadRequest(response);
+            }
+        }
         #endregion
     }
 }

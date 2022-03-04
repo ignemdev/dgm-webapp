@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TeamPlayers.Core
+namespace System
 {
     public static class MessageHandler
     {

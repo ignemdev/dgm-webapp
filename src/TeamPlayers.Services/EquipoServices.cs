@@ -32,7 +32,7 @@ namespace TeamPlayers.Services
             return addedEquipo;
         }
 
-        public async Task DeleteEquipoById(int equipoId)
+        public async Task<Equipo> DeleteEquipoById(int equipoId)
         {
             if (equipoId == 0)
                 throw new ArgumentNullException(MessageHandler.E2);
@@ -44,6 +44,8 @@ namespace TeamPlayers.Services
 
             _unitOfWork.Equipo.RemoveById(equipoId);
             await _unitOfWork.SaveAsync();
+
+            return dbEquipo;
         }
 
         public async Task<IEnumerable<Equipo>> GetAllEquipos()
@@ -81,6 +83,28 @@ namespace TeamPlayers.Services
             await _unitOfWork.SaveAsync();
 
             return updatedEquipo;
+        }
+
+        public async Task<Equipo> ToggleEquipoById(int equipoId)
+        {
+            if (equipoId == 0)
+                throw new ArgumentNullException(MessageHandler.E2);
+
+            var dbEquipo = await _unitOfWork.Equipo.GetByIdAsync(equipoId);
+
+            var status = ((Estados)dbEquipo.IdEstado == Estados.Activo) ? Estados.Inactivo : Estados.Activo;
+
+            if (dbEquipo == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            var toggledEquipo = await _unitOfWork.Equipo.ChangeStatus(dbEquipo, status);
+
+            if (toggledEquipo == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            await _unitOfWork.SaveAsync();
+
+            return toggledEquipo;
         }
     }
 }
