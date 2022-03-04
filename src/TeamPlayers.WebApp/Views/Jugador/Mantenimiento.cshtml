@@ -1,3 +1,222 @@
 ﻿@{
     ViewData["Title"] = "Jugadores";
 }
+<section id="jugador-mantenimiento-container">
+    <zing-grid caption="Jugadores"
+               lang="es"
+               layout-controls
+               columns-control
+               sort
+               search
+               pager
+               page-size="10"
+               page-size-options="2,3,6"
+               layout="card"
+               theme="ios"
+               width="stretch"
+               filter>
+        <zg-data src="/api/jugador">
+            <zg-param name="recordPath" value="result"></zg-param>
+        </zg-data>
+        <zg-button>
+            <button id="jugador-mantenimiento-button-add" class="button default large fg-darkGrayBlue">
+                <span class="mif-add mif-lg"></span>
+            </button>
+        </zg-button>
+        <zg-colgroup>
+            <zg-column type="number" index="id" header="Id"></zg-column>
+            <zg-column index="nombre" header="Nombre"></zg-column>
+            <zg-column index="apellido" header="Apellido"></zg-column>
+            <zg-column index="estado.nombre" header="Estado"></zg-column>
+            <zg-column type="date" index="nacimiento" header="Nacimiento"></zg-column>
+            <zg-column index="pasaporte" header="Pasaporte"></zg-column>
+            <zg-column index="direccion" header="Direccion" width="400"></zg-column>
+            <zg-column index="sexo" header="Sexo"></zg-column>
+            <zg-column index="equipo.nombre" header="equipo" height="400"></zg-column>
+            <zg-column type="datetime" index="creado" header="Creado"></zg-column>
+            <zg-column index="id" header="Activo/Inactivo" width="120" sort="disabled" filter="disabled" renderer="checkRenderer">
+                <input class="jugador-mantenimiento-check-estado" type="checkbox" data-estado=[[record.idEstado]] onchange=checkEstadoHandler([[record.id]]) data-role="switch" data-cls-switch="mySwitch" data-cls-check="bd-cyan myCheck">
+            </zg-column>
+            <zg-column index="id" header="Operaciones" sort="disabled" filter="disabled">
+                <zg-button>
+                    <button class="button fg-darkGrayBlue jugador-mantenimiento-button-edit" onclick="editButtonHandler([[record.id]])"><span class="mif-pencil mif-lg"></span></button>
+                </zg-button>
+                <zg-button>
+                    <button class="button alert jugador-mantenimiento-button-delete" onclick="deleteButtonHandler([[record.id]])"><span class="mif-bin mif-lg"></span></button>
+                </zg-button>
+            </zg-column>
+        </zg-colgroup>
+    </zing-grid>
+
+    <div class="dialog"
+         data-role="dialog"
+         data-on-close="upsertModalOnCloseHandler()"
+         id="jugador-mantenimiento-modal-upsert">
+
+        <div class="dialog-title">Guardar/Editar Jugador</div>
+        <div class="dialog-content">
+            <partial name="_JugadorUpsert">
+        </div>
+        <div class="dialog-actions">
+            <button class="button js-dialog-close">Cerrar</button>
+        </div>
+    </div>
+
+    <div class="dialog"
+         data-role="dialog"
+         data-on-close="equipoModalOnCloseHandler()"
+         id="jugador-mantenimiento-modal-equipo">
+        <div class="dialog-title">Asignar Equipo</div>
+        <div class="dialog-content">
+            <partial name="_JugadorEquipoUpsert">
+        </div>
+        <div class="dialog-actions">
+            <button class="button js-dialog-close">Cerrar</button>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+@{
+    await Html.RenderPartialAsync("_CrudUtilities");
+}
+
+   <script>
+        //references       
+        const addButton = document.querySelector('#jugador-mantenimiento-button-add');
+        const upsertModal = document.querySelector('#jugador-mantenimiento-modal-upsert');
+        const upsertForm = document.querySelector('#jugador-mantenimiento-form-upsert');
+        const equipoModal = document.querySelector('#jugador-mantenimiento-modal-equipo');
+        const equipoForm = document.querySelector('#jugador-mantenimiento-form-equipo');
+        const zinggrid = document.querySelector('zing-grid');
+
+        const selectSexoConfig = {
+            url: '/datasets/sexes.json',
+            selectId: '#jugador-mantenimiento-form-upsert #Sexo',
+            value: 'short',
+            label: 'description'
+        };
+
+        const selectEquipoConfig = {
+            url: '/api/equipo?estado=1',
+            selectId: '#jugador-mantenimiento-form-equipo #Equipo',
+            value: 'id',
+            label: 'nombre'
+        };
+
+        const upsertConfig = {
+            url: '/api/jugador',
+            headers: { 'Content-Type': 'application/json'}
+        };
+
+        const upsertToggleConfig = {
+            url: '/api/jugador/status',
+            headers: { 'Content-Type': 'application/json'}
+        };
+
+        const confirmConfig = {
+            title: 'Eliminando jugador!',
+            message: '¿Esta seguro de que desea eliminar el jugador?'
+        }
+
+        //function
+        const refreshGrid = () => zinggrid.refresh();
+
+        const fillUpsertJugadorForm = async (jugador) => {
+            upsertForm.elements['Id'].value = jugador?.id ?? '0';
+            upsertForm.elements['Nombre'].value = jugador?.nombre ?? '';
+            upsertForm.elements['Apellido'].value = jugador?.apellido ?? '';
+            upsertForm.elements['Nacimiento'].valueAsDate  = new Date(jugador?.nacimiento);
+            upsertForm.elements['Pasaporte'].value = jugador?.pasaporte ?? '';
+            upsertForm.elements['Direccion'].value = jugador?.direccion ?? '';
+            await initSelect(selectSexoConfig, jugador?.sexo);
+        }
+
+        function checkRenderer(stubArgument, cellDOMRef, cellRef){
+            const check = cellDOMRef.querySelector('.jugador-mantenimiento-check-estado input[type=checkbox]');
+            const estado = Number(check.dataset.estado);
+            check.checked = (estado === 1) ? true : false;
+        };
+
+        //handlers
+        const addButtonHandler = async (e) => {
+            await initSelect(selectSexoConfig);
+            Metro.dialog.open(upsertModal);
+        } 
+
+        const editButtonHandler = async (id) =>  {
+            const jugador = await getData(`/api/jugador/${id}`)
+            await fillUpsertJugadorForm(jugador);
+            Metro.dialog.open(upsertModal);
+        };
+
+        const deleteButtonHandler = async (id) => {
+            showConfirm(confirmConfig, async () => {
+                const response = await getData(`/api/jugador/${id}`,'DELETE');
+
+                const {hasError, errorMessage} = response
+
+                 if(hasError){
+                     showToast(errorMessage, 'alert');
+                   return;
+                 }
+
+                Metro.dialog.close($('.mantenimiento-confirm-dialog'));
+                showToast('El jugador ha sido eliminado exitosamente.');
+                refreshGrid();
+            });
+        }
+
+        const checkEstadoHandler = async (id) => {
+           const response = await upsertData(upsertToggleConfig, { id }, 'PUT');
+           const {hasError, errorMessage} = response
+
+            if(hasError){
+                showToast(errorMessage, 'alert');
+              return;
+            }
+
+            showToast('Cambio de estado exitoso.');
+            refreshGrid();
+        }
+
+        const upsertModalOnCloseHandler = () => {
+            refreshGrid();
+            fillUpsertJugadorForm({});
+        }
+
+        const equipoModalOnCloseHandler = () => {
+            refreshGrid();
+            //fillUpsertJugadorForm({});
+        }
+
+        const upsertFormSubmitHandler = async (e) =>{
+            e.preventDefault();
+            const values = getObjectFromForm(e);
+            const {Id, ...jugador} = values;
+
+            const response = (Id === 0) ? 
+                await upsertData(upsertConfig, jugador) :
+                await upsertData(upsertConfig, {Id, ...jugador}, 'PUT');
+
+            const {hasError, errorMessage} = response
+
+            if(hasError){
+                showToast(errorMessage, 'alert');
+              return;
+            }
+
+            showToast('Jugador guardado exitosamente');
+            Metro.dialog.close(upsertModal)
+        }
+
+        //listeners
+        addButton.addEventListener('click', addButtonHandler);
+        upsertForm.addEventListener('submit', upsertFormSubmitHandler)
+        upsertForm.addEventListener('submit', upsertFormSubmitHandler)
+    </script>
+
+}

@@ -9,17 +9,18 @@ namespace TeamPlayers.Core.Entities
     {
         [Required(AllowEmptyStrings = false)]
         public string Apellido { get; set; } = default!;
-        [DataType(DataType.DateTime)]
-        public DateTime Nacimiento { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime Nacimiento { get; set; } = DateTime.Now;
 
         [Required(AllowEmptyStrings = false)]
+        [MaxLength(9)]
         [MinLength(9)]
         public string Pasaporte { get; set; } = default!;
         [Required(AllowEmptyStrings = false)]
         public string Direccion { get; set; } = default!;
         public char Sexo { get; set; } = default!;
         public int? IdEquipo { get; set; }
-        public int IdEstado { get; set; }
+        public int IdEstado { get; set; } = (int)Estados.AgenteLibre;
         public Estado Estado { get; set; } = default!;
         public Equipo? Equipo { get; set; } = default!;
     }

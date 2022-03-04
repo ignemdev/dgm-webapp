@@ -29,7 +29,6 @@
             <zg-column index="nombre" header="Nombre"></zg-column>
             <zg-column index="pais" header="Pais"></zg-column>
             <zg-column type="datetime" index="creado" header="Creado"></zg-column>
-            @*<zg-column index="estado.nombre" header="Estado" sort="disabled" filter="disabled"></zg-column> <!--switch-->*@
             <zg-column index="id" header="Estado" width="120" sort="disabled" filter="disabled" renderer="checkRenderer">
                 <input class="equipo-mantenimiento-check-estado" type="checkbox" data-estado=[[record.idEstado]] onchange=checkEstadoHandler([[record.id]]) data-role="switch" data-cls-switch="mySwitch" data-cls-check="bd-cyan myCheck">
             </zg-column>

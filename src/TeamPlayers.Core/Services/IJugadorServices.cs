@@ -10,6 +10,8 @@ namespace TeamPlayers.Core.Services
         Task<Jugador> AddJugador(Jugador jugador);
         Task<Jugador> UpdateJugador(Jugador jugador);
         Task<Jugador> GetJugadorById(int jugadorId);
-        Task DeleteJugadorById(int jugadorId);
+        Task<Jugador> DeleteJugadorById(int jugadorId);
+        Task<Jugador> ToggleJugadorById(int jugadorId);
+        Task<Jugador> ChangeJugadorTeam(Jugador jugador);
     }
 }

@@ -14,8 +14,8 @@ namespace TeamPlayers.Core.Entities
         }
         
         [Required(AllowEmptyStrings = false)]
-        [MinLength(3)]
         [MaxLength(3)]
+        [MinLength(3)]
         public string Pais { get; set; } = default!;
         public int IdEstado { get; set; } = (int)Estados.Activo;
         public Estado Estado { get; set; } = default!;

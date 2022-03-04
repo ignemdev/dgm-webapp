@@ -1,0 +1,40 @@
+﻿@model TeamPlayers.Core.Entities.Jugador
+
+<form id="jugador-mantenimiento-form-upsert">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" value="0" />
+    <div class="form-group">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" class="metro-input" />
+        <span asp-validation-for="Nombre" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Apellido"></label>
+        <input asp-for="Apellido" class="metro-input" />
+        <span asp-validation-for="Apellido" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Nacimiento"></label>
+        <input asp-for="Nacimiento" class="metro-input"/>
+        <span asp-validation-for="Nacimiento" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Pasaporte"></label>
+        <input asp-for="Pasaporte" class="metro-input" />
+        <span asp-validation-for="Pasaporte" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Direccion"></label>
+        <textarea asp-for="Direccion" data-role="textarea" class="metro-input"></textarea>
+        <span asp-validation-for="Direccion" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sexo"></label>
+        <select asp-for="Sexo" data-role="select"></select>
+        <span asp-validation-for="Sexo" class="fg-crimson"></span>
+    </div>
+    <div class="form-group">
+        <input id="jugador-mantenimiento-form-submit" type="submit" value="Guardar" class="button success" />
+    </div>
+</form>
+

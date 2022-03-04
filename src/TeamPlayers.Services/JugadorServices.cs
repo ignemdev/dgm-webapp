@@ -32,23 +32,25 @@ namespace TeamPlayers.Services
             return addedJugador;
         }
 
-        public async Task DeleteJugadorById(int jugadorId)
+        public async Task<Jugador> DeleteJugadorById(int jugadorId)
         {
             if (jugadorId == 0)
                 throw new ArgumentNullException(MessageHandler.E2);
 
-            var dbJugador = await _unitOfWork.Jugador.GetFirstOrDefaultAsync(j => j.Id == jugadorId, includeProperties: "Equipo,Estado");
+            var dbJugador = await _unitOfWork.Jugador.GetByIdAsync(jugadorId);
 
             if (dbJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);
 
             _unitOfWork.Jugador.RemoveById(jugadorId);
             await _unitOfWork.SaveAsync();
+
+            return dbJugador;
         }
 
         public async Task<IEnumerable<Jugador>> GetAllJugadores()
         {
-            var jugadors = await _unitOfWork.Jugador.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado));
+            var jugadors = await _unitOfWork.Jugador.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado), includeProperties: "Equipo,Estado");
             return jugadors;
         }
 
@@ -74,6 +76,47 @@ namespace TeamPlayers.Services
                 throw new ArgumentNullException(MessageHandler.E2);
 
             var updatedJugador = await _unitOfWork.Jugador.UpdateAsync(jugador);
+
+            if (updatedJugador == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            await _unitOfWork.SaveAsync();
+
+            return updatedJugador;
+        }
+
+        public async Task<Jugador> ToggleJugadorById(int jugadorId)
+        {
+            if (jugadorId == 0)
+                throw new ArgumentNullException(MessageHandler.E2);
+
+            var dbJugador = await _unitOfWork.Jugador.GetByIdAsync(jugadorId);
+
+            var status = ((Estados)dbJugador.IdEstado == Estados.Activo) ? Estados.Inactivo : Estados.Activo;
+
+            if (dbJugador == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            var toggledJugador = await _unitOfWork.Jugador.ChangeStatus(dbJugador, status);
+
+            if (toggledJugador == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            await _unitOfWork.SaveAsync();
+
+            return toggledJugador;
+        }
+
+        public async Task<Jugador> ChangeJugadorTeam(Jugador jugador)
+        {
+            if (jugador == null)
+                throw new ArgumentNullException(MessageHandler.E1);
+
+            if (jugador.Id == 0)
+                throw new ArgumentNullException(MessageHandler.E2);
+
+            var updatedJugador = await _unitOfWork.Jugador.AssignTeam(jugador);
+            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, Estados.AgenteLibre);
 
             if (updatedJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);

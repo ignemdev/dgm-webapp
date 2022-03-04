@@ -46,12 +46,14 @@ namespace TeamPlayers.WebApp.Controllers
         }
 
         [HttpGet("/api/equipo")]
-        public async Task<ActionResult<ResponseModel<IEnumerable<Equipo>>>> GetAllEquipos()
+        public async Task<ActionResult<ResponseModel<IEnumerable<Equipo>>>> GetAllEquipos([FromQuery] int estado = 0)
         {
             var response = new ResponseModel<IEnumerable<Equipo>>();
             try
             {
-                response.Result = await _equipoServices.GetAllEquipos();
+                response.Result = (estado == 0) ? 
+                    await _equipoServices.GetAllEquipos() : 
+                    await _equipoServices.GetAllEquiposByStatus((Estados)estado);
 
                 if (response.Result == null)
                     return NotFound();

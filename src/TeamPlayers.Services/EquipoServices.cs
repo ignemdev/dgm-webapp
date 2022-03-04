@@ -54,6 +54,14 @@ namespace TeamPlayers.Services
             return equipos;
         }
 
+        public async Task<IEnumerable<Equipo>> GetAllEquiposByStatus(Estados estado)
+        {
+            var equipos = await _unitOfWork.Equipo.GetAllAsync((e) => e.IdEstado == (int)estado,
+                orderBy: x => x.OrderByDescending(x => x.Creado), 
+                includeProperties: "Estado");
+            return equipos;
+        }
+
         public async Task<Equipo> GetEquipoById(int equipoId)
         {
             if (equipoId == 0)
