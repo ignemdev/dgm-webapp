@@ -19,6 +19,7 @@ namespace TeamPlayers.Core.Entities
         [Required(AllowEmptyStrings = false)]
         public string Direccion { get; set; } = default!;
         public char Sexo { get; set; } = default!;
+        [Display(Name = "Equipo")]
         public int? IdEquipo { get; set; }
         public int IdEstado { get; set; } = (int)Estados.AgenteLibre;
         public Estado Estado { get; set; } = default!;

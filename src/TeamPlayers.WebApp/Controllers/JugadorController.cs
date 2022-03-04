@@ -104,7 +104,7 @@ namespace TeamPlayers.WebApp.Controllers
             }
         }
 
-        [HttpPut("/api/jugador/status")]
+        [HttpPut("/api/jugador/toggle")]
         public async Task<ActionResult<ResponseModel<Jugador>>> ToggleJugadorById([FromBody] ToggleDTO toggleDTO)
         {
             var response = new ResponseModel<Jugador>();
@@ -124,13 +124,33 @@ namespace TeamPlayers.WebApp.Controllers
             }
         }
 
-        [HttpPut("/api/jugador/team")]
+        [HttpPut("/api/jugador/equipo")]
         public async Task<ActionResult<ResponseModel<Jugador>>> ChangeJugadorTeam([FromBody] Jugador jugador)
         {
             var response = new ResponseModel<Jugador>();
             try
             {
                 response.Result = await _jugadorServices.ChangeJugadorTeam(jugador);
+
+                if (response.Result == null)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                response.SetErrorMessage((ex.InnerException ?? ex).Message);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPut("/api/jugador/liberar")]
+        public async Task<ActionResult<ResponseModel<Jugador>>> HacerJugadorAgenteLibre([FromBody] Jugador jugador)
+        {
+            var response = new ResponseModel<Jugador>();
+            try
+            {
+                response.Result = await _jugadorServices.HacerJugadorAgenteLibre(jugador);
 
                 if (response.Result == null)
                     return NotFound();

@@ -13,5 +13,6 @@ namespace TeamPlayers.Core.Services
         Task<Jugador> DeleteJugadorById(int jugadorId);
         Task<Jugador> ToggleJugadorById(int jugadorId);
         Task<Jugador> ChangeJugadorTeam(Jugador jugador);
+        Task<Jugador> HacerJugadorAgenteLibre(Jugador jugador);
     }
 }

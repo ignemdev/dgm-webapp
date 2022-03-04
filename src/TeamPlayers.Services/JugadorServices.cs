@@ -116,6 +116,25 @@ namespace TeamPlayers.Services
                 throw new ArgumentNullException(MessageHandler.E2);
 
             var updatedJugador = await _unitOfWork.Jugador.AssignTeam(jugador);
+            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, Estados.Activo);
+
+            if (updatedJugador == null)
+                throw new NullReferenceException(MessageHandler.E3);
+
+            await _unitOfWork.SaveAsync();
+
+            return updatedJugador;
+        }
+
+        public async Task<Jugador> HacerJugadorAgenteLibre(Jugador jugador)
+        {
+            if (jugador == null)
+                throw new ArgumentNullException(MessageHandler.E1);
+
+            if (jugador.Id == 0)
+                throw new ArgumentNullException(MessageHandler.E2);
+
+            var updatedJugador = await _unitOfWork.Jugador.AssignTeam(jugador);
             await _unitOfWork.Jugador.ChangeStatus(updatedJugador, Estados.AgenteLibre);
 
             if (updatedJugador == null)

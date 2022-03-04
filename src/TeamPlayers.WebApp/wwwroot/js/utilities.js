@@ -36,7 +36,11 @@ const showConfirm = (confirmConfig, confirmFunction) => {
 
 const initSelect = async (config, defaultValue = null) => {
     const response = await fetch(config.url);
-    const options = (await response.json()).reduce((acc, item) => (acc[item[config.value]] = item[config.label], acc), {})
+    const json = await response.json();
+
+    const { result } = json;
+
+    const options = (result ?? json).reduce((acc, item) => (acc[item[config.value]] = item[config.label], acc), {})
     const select = $(config.selectId).data('select');
     select.data(options);
 
