@@ -19,6 +19,11 @@ namespace TeamPlayers.Core.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null!,
             string includeProperties = null!
         );
+        Task<IEnumerable<TEntity>> GetAllAsync(
+            List<Expression<Func<TEntity, bool>>> predicates,
+            Func<IQueryable<TEntity>,
+            IOrderedQueryable<TEntity>> orderBy = null!,
+            string includeProperties = null!);
         Task<TEntity> AddAsync(TEntity entity);
         Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);

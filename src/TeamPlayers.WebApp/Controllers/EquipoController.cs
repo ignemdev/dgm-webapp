@@ -24,6 +24,23 @@ namespace TeamPlayers.WebApp.Controllers
             return View(equipo);
         }
 
+        [Route("equipo/{id:int}/jugadores")]
+        public async Task<ActionResult> Jugadores(int id)
+        {
+            var equipo = new Equipo();
+
+            try
+            {
+                equipo = await _equipoServices.GetEquipoById(id); 
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(Mantenimiento));
+            }
+
+            return View(equipo);
+        }
+
         #region APIs
         [HttpGet("/api/equipo/{id:int}", Name = "GetEquipoById")]
         public async Task<ActionResult<ResponseModel<Equipo>>> GetEquipoById(int id)
@@ -53,7 +70,7 @@ namespace TeamPlayers.WebApp.Controllers
             {
                 response.Result = (estado == 0) ? 
                     await _equipoServices.GetAllEquipos() : 
-                    await _equipoServices.GetAllEquiposByStatus((Estados)estado);
+                    await _equipoServices.GetAllEquiposByStatus((TipoEstado)estado);
 
                 if (response.Result == null)
                     return NotFound();

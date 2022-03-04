@@ -23,6 +23,15 @@ namespace TeamPlayers.WebApp.Controllers
             return View(jugador);
         }
 
+        [Route("jugador/activos")]
+        public ActionResult Activos() => View();
+
+        [Route("jugador/inactivos")]
+        public ActionResult Inactivos() => View();
+
+        [Route("jugador/libres")]
+        public ActionResult Libres() => View();
+
         #region APIs
         [HttpGet("/api/jugador/{id:int}", Name = "GetJugadorById")]
         public async Task<ActionResult<ResponseModel<Jugador>>> GetJugadorById(int id)
@@ -45,12 +54,12 @@ namespace TeamPlayers.WebApp.Controllers
         }
 
         [HttpGet("/api/jugador")]
-        public async Task<ActionResult<ResponseModel<IEnumerable<Jugador>>>> GetAllJugadores()
+        public async Task<ActionResult<ResponseModel<IEnumerable<Jugador>>>> GetAllJugadores([FromQuery] Jugador props)
         {
             var response = new ResponseModel<IEnumerable<Jugador>>();
             try
             {
-                response.Result = await _jugadorServices.GetAllJugadores();
+                response.Result = await _jugadorServices.GetAllJugadoresByProps(props);
 
                 if (response.Result == null)
                     return NotFound();
@@ -185,4 +194,5 @@ namespace TeamPlayers.WebApp.Controllers
         }
         #endregion
     }
+
 }

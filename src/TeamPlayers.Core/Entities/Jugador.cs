@@ -21,7 +21,7 @@ namespace TeamPlayers.Core.Entities
         public char Sexo { get; set; } = default!;
         [Display(Name = "Equipo")]
         public int? IdEquipo { get; set; }
-        public int IdEstado { get; set; } = (int)Estados.AgenteLibre;
+        public int IdEstado { get; set; }
         public Estado Estado { get; set; } = default!;
         public Equipo? Equipo { get; set; } = default!;
     }

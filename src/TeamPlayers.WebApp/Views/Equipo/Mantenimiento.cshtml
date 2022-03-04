@@ -28,6 +28,7 @@
             <zg-column type="number" index="id" header="Id"></zg-column>
             <zg-column index="nombre" header="Nombre"></zg-column>
             <zg-column index="pais" header="Pais"></zg-column>
+             <zg-column index="estado.nombre" header="Estado"></zg-column>
             <zg-column type="datetime" index="creado" header="Creado"></zg-column>
             <zg-column index="id" header="Estado" width="120" sort="disabled" filter="disabled" renderer="checkRenderer">
                 <input class="equipo-mantenimiento-check-estado" type="checkbox" data-estado=[[record.idEstado]] onchange=checkEstadoHandler([[record.id]]) data-role="switch" data-cls-switch="mySwitch" data-cls-check="bd-cyan myCheck">
@@ -38,6 +39,9 @@
                 </zg-button>
                 <zg-button>
                     <button class="button alert equipo-mantenimiento-button-delete" onclick="deleteButtonHandler([[record.id]])"><span class="mif-bin mif-lg"></span></button>
+                </zg-button>
+                <zg-button>
+                    <a href="/equipo/[[record.id]]/jugadores" class="button info equipo-mantenimiento-button-jugadores"><span class="mif-organization mif-lg mr-2"></span>Jugadores</a>
                 </zg-button>
             </zg-column>
         </zg-colgroup>

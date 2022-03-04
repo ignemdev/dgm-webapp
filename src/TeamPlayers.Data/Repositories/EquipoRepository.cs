@@ -28,7 +28,7 @@ namespace TeamPlayers.Data.Repositories
             return dbEquipo!;
         }
 
-        public async Task<Equipo> ChangeStatus(Equipo equipo, Estados estado)
+        public async Task<Equipo> ChangeStatus(Equipo equipo, TipoEstado estado)
         {
             var dbEquipo = await _db.Equipos.FirstOrDefaultAsync(c => c.Id == equipo.Id);
 

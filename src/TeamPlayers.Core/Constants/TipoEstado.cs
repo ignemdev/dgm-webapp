@@ -4,7 +4,7 @@ using System.Text;
 
 namespace System
 {
-    public enum Estados : int
+    public enum TipoEstado : int
     {
         Activo = 1,
         Inactivo = 2,

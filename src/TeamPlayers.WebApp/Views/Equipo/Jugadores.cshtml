@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = Model.Nombre;
+}
+<section id="jugador-mantenimiento-container">
+    <zing-grid caption="Jugadores"
+               lang="es"
+               layout-controls
+               columns-control
+               sort
+               search
+               pager
+               page-size="10"
+               page-size-options="2,3,6"
+               theme="ios"
+               width="stretch"
+               filter>
+        <zg-data src="/api/jugador?idEquipo=@Model.Id">
+            <zg-param name="recordPath" value="result"></zg-param>
+        </zg-data>
+        <zg-button>
+            <a asp-controller="Equipo" asp-action="Mantenimiento" class="button default large fg-darkGrayBlue">
+                <span class="mif-arrow-left mif-lg"></span>
+            </a>
+        </zg-button>
+        <zg-colgroup>
+            <zg-column type="number" index="id" header="Id"></zg-column>
+            <zg-column index="nombre" header="Nombre"></zg-column>
+            <zg-column index="apellido" header="Apellido"></zg-column>
+            <zg-column index="estado.nombre" header="Estado"></zg-column>
+            <zg-column type="date" index="nacimiento" header="Nacimiento"></zg-column>
+            <zg-column index="pasaporte" header="Pasaporte"></zg-column>
+            <zg-column index="direccion" header="Direccion" height="400"></zg-column>
+            <zg-column index="sexo" header="Sexo"></zg-column>
+            <zg-column type="datetime" index="creado" header="Creado"></zg-column>
+    </zing-grid>
+</section>
+
+@section Scripts{
+@{
+    await Html.RenderPartialAsync("_CrudUtilities");
+}
+}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TeamPlayers.Core;
 using TeamPlayers.Core.Entities;
@@ -50,8 +51,29 @@ namespace TeamPlayers.Services
 
         public async Task<IEnumerable<Jugador>> GetAllJugadores()
         {
-            var jugadors = await _unitOfWork.Jugador.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado), includeProperties: "Equipo,Estado");
-            return jugadors;
+            var jugadores = await _unitOfWork.Jugador.GetAllAsync(orderBy: x => x.OrderByDescending(x => x.Creado), includeProperties: "Equipo,Estado");
+            return jugadores;
+        }
+
+        public async Task<IEnumerable<Jugador>> GetAllJugadoresByProps(Jugador? props = null)
+        {
+            var filters = new List<Expression<Func<Jugador, bool>>>();
+
+            if(props != null)
+            {
+                if (props.IdEstado != 0)
+                    filters.Add((j) => j.IdEstado == props.IdEstado);
+
+                if (props.IdEquipo != 0 && props.IdEquipo != null)
+                    filters.Add((j) => j.IdEquipo == props.IdEquipo);
+            }
+
+            var jugadores = await _unitOfWork.Jugador.GetAllAsync(
+                filters, 
+                orderBy: x => x.OrderByDescending(x => x.Creado), 
+                includeProperties: "Equipo,Estado");
+
+            return jugadores;
         }
 
         public async Task<Jugador> GetJugadorById(int jugadorId)
@@ -92,7 +114,7 @@ namespace TeamPlayers.Services
 
             var dbJugador = await _unitOfWork.Jugador.GetByIdAsync(jugadorId);
 
-            var status = ((Estados)dbJugador.IdEstado == Estados.Activo) ? Estados.Inactivo : Estados.Activo;
+            var status = ((TipoEstado)dbJugador.IdEstado == TipoEstado.Activo) ? TipoEstado.Inactivo : TipoEstado.Activo;
 
             if (dbJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);
@@ -116,7 +138,7 @@ namespace TeamPlayers.Services
                 throw new ArgumentNullException(MessageHandler.E2);
 
             var updatedJugador = await _unitOfWork.Jugador.AssignTeam(jugador);
-            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, Estados.Activo);
+            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, TipoEstado.Activo);
 
             if (updatedJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);
@@ -135,7 +157,7 @@ namespace TeamPlayers.Services
                 throw new ArgumentNullException(MessageHandler.E2);
 
             var updatedJugador = await _unitOfWork.Jugador.AssignTeam(jugador);
-            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, Estados.AgenteLibre);
+            await _unitOfWork.Jugador.ChangeStatus(updatedJugador, TipoEstado.AgenteLibre);
 
             if (updatedJugador == null)
                 throw new NullReferenceException(MessageHandler.E3);

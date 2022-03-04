@@ -24,5 +24,17 @@ namespace TeamPlayers.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entityEntry in ChangeTracker.Entries<Jugador>())
+            {
+                if (entityEntry.State == EntityState.Added)
+                {
+                    entityEntry.Entity.IdEstado = (int)TipoEstado.AgenteLibre;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

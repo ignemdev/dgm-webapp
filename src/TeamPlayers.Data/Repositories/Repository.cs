@@ -49,6 +49,28 @@ namespace TeamPlayers.Data.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync(List<Expression<Func<TEntity, bool>>> predicates, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null!, string includeProperties = null!)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            if (predicates.Any())
+            {
+                foreach (var item in predicates)
+                    query = query.Where(item);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                    query = query.Include(property);
+            }
+
+            if (orderBy != null)
+                return await orderBy(query).ToListAsync();
+
+            return await query.ToListAsync();
+        }
+
         public async Task<TEntity> GetByIdAsync(int id)
         {
             return await dbSet.FindAsync(id);

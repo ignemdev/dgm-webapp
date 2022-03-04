@@ -16,9 +16,13 @@
            data-shift=".shifted-content">
         <ul class="sidebar-menu">
             <li class="group-title">Mantenimientos</li>
-            @*<li><a asp-controller="Estado" asp-action="Mantenimiento"><span class="mif-cogs icon"></span>Estados</a></li>*@
             <li><a asp-controller="Equipo" asp-action="Mantenimiento"><span class="mif-organization icon"></span>Equipos</a></li>
             <li><a asp-controller="Jugador" asp-action="Mantenimiento"><span class="mif-users icon"></span>Jugadores</a></li>
+            <li class="divider"></li>
+            <li class="group-title">Consultas | Jugadores</li>
+            <li><a asp-controller="Jugador" asp-action="Activos"><span class="mif-user-check icon"></span>Activos</a></li>
+            <li><a asp-controller="Jugador" asp-action="Inactivos"><span class="mif-user-minus icon"></span>Inactivos</a></li>
+            <li><a asp-controller="Jugador" asp-action="Libres"><span class="mif-record_voice_over icon"></span>Agentes Libres</a></li>
             <li class="divider"></li>
         </ul>
     </aside>

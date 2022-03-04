@@ -54,7 +54,7 @@ namespace TeamPlayers.Services
             return equipos;
         }
 
-        public async Task<IEnumerable<Equipo>> GetAllEquiposByStatus(Estados estado)
+        public async Task<IEnumerable<Equipo>> GetAllEquiposByStatus(TipoEstado estado)
         {
             var equipos = await _unitOfWork.Equipo.GetAllAsync((e) => e.IdEstado == (int)estado,
                 orderBy: x => x.OrderByDescending(x => x.Creado), 
@@ -100,7 +100,7 @@ namespace TeamPlayers.Services
 
             var dbEquipo = await _unitOfWork.Equipo.GetByIdAsync(equipoId);
 
-            var status = ((Estados)dbEquipo.IdEstado == Estados.Activo) ? Estados.Inactivo : Estados.Activo;
+            var status = ((TipoEstado)dbEquipo.IdEstado == TipoEstado.Activo) ? TipoEstado.Inactivo : TipoEstado.Activo;
 
             if (dbEquipo == null)
                 throw new NullReferenceException(MessageHandler.E3);

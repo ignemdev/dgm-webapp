@@ -22,6 +22,15 @@
             <button id="jugador-mantenimiento-button-add" class="button default large fg-darkGrayBlue">
                 <span class="mif-add mif-lg"></span>
             </button>
+             <a asp-controller="Jugador" asp-action="Activos" class="button default large fg-darkGrayBlue">
+                <span class="mif-user-check mif-lg"></span>
+            </a>
+            <a asp-controller="Jugador" asp-action="Inactivos" class="button default large fg-darkGrayBlue">
+                <span class="mif-user-minus mif-lg"></span>
+            </a>
+            <a asp-controller="Jugador" asp-action="Libres" class="button default large fg-darkGrayBlue">
+                <span class="mif-record_voice_over mif-lg"></span>
+            </a>
         </zg-button>
         <zg-colgroup>
             <zg-column type="number" index="id" header="Id"></zg-column>

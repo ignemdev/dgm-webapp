@@ -32,7 +32,7 @@ namespace TeamPlayers.Data.Repositories
             return dbJugador!;
         }
 
-        public async Task<Jugador> ChangeStatus(Jugador jugador, Estados estado)
+        public async Task<Jugador> ChangeStatus(Jugador jugador, TipoEstado estado)
         {
             var dbJugador = await _db.Jugadores.FirstOrDefaultAsync(c => c.Id == jugador.Id);
 
